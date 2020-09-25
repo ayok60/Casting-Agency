@@ -29,12 +29,15 @@ class Movies(db.Model):
     __tablename__ = 'movies'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(String)
-    release_date = db.Column(String)
+    title = db.Column(db.String)
+    release_date = db.Column(db.String)
+    image_link = db.Column(db.String(500))
 
-    def __init__(self, title, release_date):
+
+    def __init__(self, title, release_date, image_link):
         self.title = title
         self.release_date = release_date
+        self.image_link = image_link
 
     def insert(self):
         db.session.add(self)
@@ -51,7 +54,8 @@ class Movies(db.Model):
         return {
             'id': self.id,
             'title': self.title,
-            'release_date': self.release_date
+            'release_date': self.release_date,
+            'image_link': self.image_link
         }
 
 '''
@@ -62,14 +66,16 @@ class Actors(db.Model):
     __tablename__ = 'actors'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(String)
-    age = db.Column(db.Integer)
+    name = db.Column(db.String)
+    age = db.Column(db.String)
     gender = db.Column(db.Enum('Male', 'Female', name="gender"))
+    image_link = db.Column(db.String)
 
-    def __init__(self, name, age, gender):
+    def __init__(self, name, age, gender , image_link):
         self.name = name
         self.age = age
         self.gender = gender
+        self.image_link = image_link
 
     def insert(self):
         db.session.add(self)
@@ -87,5 +93,32 @@ class Actors(db.Model):
             'id': self.id,
             'name': self.name,
             'age': self.age,
-            'gender': self.gender
+            'gender': self.gender,
+            'image_link': self.image_link
+        }
+
+
+class Castings(db.Model):  
+    __tablename__ = 'castings'
+
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True, nullable=False)
+    actor_id = db.Column(db.Integer, db.ForeignKey('actors.id'), primary_key=True, nullable=False)
+    movie = db.relationship(Movies, backref= db.backref('actor'))
+    actor = db.relationship(Actors, backref= db.backref('movie'))
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+  
+    def update(self):
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def format(self):
+        return {
+            'actor_id': self.actor_id,
+            'movie_id': self.movie_id,
         }

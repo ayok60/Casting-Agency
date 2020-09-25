@@ -1,57 +1,34 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router';
+import React, { Component } from 'react'
 
 import '../stylesheets/Header.css';
-import classie from  './classie';
-import History from '../History'
+import { Link } from 'react-router-dom';
+
+
 
 
 class Header extends Component {
   
+
   navTo(uri){
-    History.push(uri);
-    (function() {
-		[].slice.call(document.querySelectorAll('.menu')).forEach(function(menu) {
-			var menuItems = menu.querySelectorAll('.menu__link'),
-				setCurrent = function(ev) {
-					ev.preventDefault();
+    
+    var currentID = (uri === "/actors") ? '#actors_nav' : '#movies_nav';
+    var current = document.querySelector(currentID);
 
-					var item = ev.target.parentNode; // li
-
-					// return if already current
-					if (classie.has(item, 'menu__item--current')) {
-						return false;
-					}
-					// remove current
-					classie.remove(menu.querySelector('.menu__item--current'), 'menu__item--current');
-					// set current
-                    classie.add(item, 'menu__item--current');
-				};
-
-			[].slice.call(menuItems).forEach(function(el) {
-                el.addEventListener('click', setCurrent);
-            });
-		});
-    })(window);
+    var previousID = (uri !== "/actors") ? '#actors_nav' : '#movies_nav';
+    var previous = document.querySelector(previousID);
+    
+    current.classList.add('menu__item--current');
+    previous.classList.remove('menu__item--current');
   }
 
-  activeBtn() {
+    activeBtn() {
     const pathname = window.location.pathname;
-    var item;
-    if (pathname == "/actors") {
-      item = document.querySelector('#actors_nav')
-    }
-    else {
-      item = document.querySelector('#movies_nav')
-    }
-    classie.add(item, 'menu__item--current');
+    var item = (pathname === "/actors") ? '#actors_nav' : '#movies_nav';
+    item = document.querySelector(item)
+    item.classList.add('menu__item--current');
   }
 
   componentDidMount() {
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = "./classie.js";
-    document.body.appendChild(script);
     this.activeBtn()
   }
 
@@ -61,12 +38,12 @@ class Header extends Component {
 
     return (
         
-        <section class="section section--menu" id="Valentine">
-            <h2 class="section__title">Casting Agency</h2>
-            <nav class="menu menu--valentine">
-                <ul class="menu__list">
-                    <li onClick={() => {this.navTo('/actors')}} class="menu__item" id="actors_nav"><a class="menu__link">Actors</a></li>
-                    <li onClick={() => {this.navTo('/movies')}} class="menu__item" id="movies_nav"><a class="menu__link">Movies</a></li>
+        <section className="section section--menu" id="Valentine">
+            <h2 className="section__title">Casting Agency</h2>
+            <nav className="menu menu--valentine">
+                <ul className="menu__list">
+                    <li id="actors_nav" onClick={(e) => {this.navTo('/actors')}} className="menu__item" ><Link to="/actors" className="menu__link">Actors</Link></li>
+                    <li onClick={(e) => {this.navTo('/movies')}} className="menu__item" id="movies_nav"><Link to="/movies" className="menu__link">Movies</Link></li>
                 </ul>
             </nav>
         </section>

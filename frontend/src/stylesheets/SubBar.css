@@ -1,0 +1,92 @@
+
+
+
+.subBar {
+    margin: 20px;
+    font-family: Roboto, sans-serif;
+    padding: 0;
+    margin-bottom: 40px;
+
+  }
+  
+  .subBar > h3 {
+    font-weight: normal;
+  }
+  
+  .subBar > h1,
+  .subBar > h3 {
+    color: #d94f5c;
+    margin-bottom: 15px;
+  }
+  
+  .subBar > div {
+    display: inline-block;
+    position: relative;
+  }
+  
+  .subBar > div:after {
+    content: "";
+    background: #d94f5c;
+    width: 3px;
+    height: 18px;
+    position: absolute;
+    top: 24px;
+    right: -4px;
+    transform: rotate(135deg);
+  }
+  
+  .subBar > div > input {
+    color: #d94f5c;
+    font-size: 20px;
+    background: transparent;
+    width: 33px;
+    height: 33px;
+    padding: 10px;
+    border: solid 2.5px #d94f5c;
+    outline: none;
+    border-radius: 35px;
+    transition: width 0.5s;
+  }
+  
+  .subBar > div > input::placeholder {
+    color: #d94f5c;
+    opacity: 0;
+    transition: opacity 150ms ease-out;
+  }
+  
+  .subBar > div > input:focus::placeholder {
+    opacity: 1;
+  }
+  
+  .subBar > div > input:focus,
+  .subBar > div > input:not(:placeholder-shown),
+  .subBar > div > input:hover
+  {
+    width: 250px;
+  }
+  
+  .subBar > button {
+    margin-left: 20px;
+    font-size: 19px;
+    border-radius: 3px;
+    width:80px;
+    height: 33px;
+    border: solid 2px #d94f5c;
+    padding: 0;
+    color: #d94f5c;
+    transition: width 0.5s;
+    -webkit-transition:all 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+    -o-transition:all 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition:all 0.9s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+  }
+
+  .subBar > button:hover {
+
+    color: white;
+    background-color: #d94f5c;
+    transition: width 0.5s;
+
+  }
+
+  

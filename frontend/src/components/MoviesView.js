@@ -10,45 +10,60 @@ class MoviesView extends Component{
     constructor(){
         super();
         this.state = {
-          movies:[],
-          title: "",
-          release_date: "",
+          movies:[]
         }
     }
 
     componentDidMount() {
         this.getMovies();
+        
     }
 
     getMovies = () => {
         $.ajax({
-          url: '/movies', //TODO: update request URL
+          url: `/movies`, //TODO: update request URL
           type: "GET",
           success: (result) => {
             this.setState({
-              title: result.title,
-              release_date: result.release_date,
+                movies: result.movies
             })
             return;
           },
           error: (error) => {
-            alert('Unable to load questions. Please try your request again')
+            alert('error get movies')
             return;
           }
         })
     }
 
+    deleteMovie = (id) => (action) => {
+        if(action === 'DELETE') {
+            $.ajax({
+              url: `/movies/${id}`, //TODO: update request URL
+              type: "DELETE",
+              error: (error) => {
+                return;
+              }
+            })
+          
+        }
+      }
+
     
     render(){
+        
         return(
-            <section class="cards">
-		        <div class="container">
-			        <div class="card-list">
+            <section className="cards">
+		        <div className="container">
+			        <div className="card-list">
                         {this.state.movies.map((q, ind) => (
                             <Card
-                                key={q.id}
+                                id={q.id}
                                 title={q.title}
                                 release_date={q.release_date}
+                                image_link={q.image_link}
+                                deleteMovie={this.deleteMovie(q.id)}
+                                movie={q}
                             />
                         ))}
                     </div>

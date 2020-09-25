@@ -1,0 +1,145 @@
+
+@keyframes anvil {
+    0% {
+      transform: scale(1) translateY(0px);
+      opacity: 0;
+      box-shadow: 0 0 0 rgba(241, 241, 241, 0);
+    }
+    1% {
+      transform: scale(0.96) translateY(10px);
+      opacity: 0;
+      box-shadow: 0 0 0 rgba(241, 241, 241, 0);
+    }
+    100% {
+      transform: scale(1) translateY(0px);
+      opacity: 1;
+      box-shadow: 0 0 500px rgba(241, 241, 241, 0);
+    }
+  }
+    .popup-content {
+    -webkit-animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
+  }
+
+.modal > div >.header{
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 25px;
+}
+.popup-content img{
+    width: 200px;
+    height: 300px;
+}
+
+.popup-content{
+    background:#fff;
+    width: 600px;
+    height: auto; 
+    padding: 40px;
+}
+
+    
+.popup-overlay{
+    background:rgba(0,0,0,.5)
+}
+
+
+
+form{
+    display: grid;
+    grid-template: 1rem;
+    
+}
+
+form > label, 
+h4
+{
+    text-transform: uppercase;
+    margin-top: 15px;
+    font-weight: 500;
+    color: gray;
+} 
+
+form > input{
+    margin-bottom: 15px;
+    padding: 8px 0px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid rgb(230, 230, 230);
+    font-size: 18px;
+    font-weight: 300;
+}
+
+form > input:focus{
+    
+    border-bottom: 2px solid #d94f5c;
+    transition: 0.5s ease-in-out;
+
+}
+
+.actions {
+    position: absolute;
+    transition: .01s ease;
+    bottom: 8%;
+    right: 7%;
+}
+
+.actions > :hover{
+    background-color: #d94f5c;
+    color: white;
+}
+
+
+
+.assign-actors  .content{
+    width: 100px;
+    height: 100px; 
+}
+
+option {
+    font-size: 18px;
+    
+}
+
+
+
+.cast-list {
+    max-height: 110px;
+    overflow: auto;
+    border-bottom: 1px solid rgb(230, 230, 230);
+    text-decoration: none;
+
+
+}
+
+.cast-entities{
+    display: grid; 
+    grid-template-columns: 10% 85% 5%;
+    margin: 0px;
+    padding: 0px 10px;
+    
+}
+
+ul{
+    list-style-type: none;
+  margin: 0;
+  padding: 5px;
+}
+
+.cast-entities:hover{
+    background-color:#fce9eb;
+    border-radius: 2px;
+}
+
+.cast-entities .delete-cast{
+    color: #d94f5c;
+    font-weight: 500;
+    border: none;
+    outline: none;
+}
+
+.cast-entities .delete-cast:hover{
+    color: gray;
+}
+
+
+
