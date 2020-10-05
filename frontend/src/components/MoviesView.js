@@ -5,6 +5,11 @@ import '../stylesheets/cards.css';
 import Card from './MovieCard';
 import $ from 'jquery';
 
+
+
+const token = localStorage.getItem('JWTS_LOCAL_KEY');
+
+
 class MoviesView extends Component{
 
     constructor(){
@@ -23,6 +28,7 @@ class MoviesView extends Component{
         $.ajax({
           url: `/movies`, //TODO: update request URL
           type: "GET",
+          headers: {"Authorization": 'Bearer ' + token},
           success: (result) => {
             this.setState({
                 movies: result.movies
@@ -41,6 +47,7 @@ class MoviesView extends Component{
             $.ajax({
               url: `/movies/${id}`, //TODO: update request URL
               type: "DELETE",
+              headers: {"Authorization": 'Bearer ' + token},
               error: (error) => {
                 return;
               }

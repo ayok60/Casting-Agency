@@ -3,10 +3,11 @@ import '../stylesheets/cards.css';
 import '../stylesheets/form.css';
 import Popup from 'reactjs-popup';
 import $ from 'jquery';
+import Can from './Can';
 
 
 
-
+const token = localStorage.getItem('JWTS_LOCAL_KEY');
 
 
 class MoviesForm extends Component {
@@ -31,6 +32,7 @@ class MoviesForm extends Component {
       url: `/movies/${id}`, //TODO: update request URL
       type: "PATCH",
       dataType: 'json',
+      headers: {"Authorization": 'Bearer ' + token},
       contentType: 'application/json',
       data: JSON.stringify({
         title: this.state.title,
@@ -69,7 +71,11 @@ class MoviesForm extends Component {
 
     return(
         
-        <Popup trigger={open => ( <button > Edit </button> )} modal>
+        
+      <Can
+        permission="edit:movies"
+        yes={() => (
+          <Popup trigger={open => ( <button > Edit </button> )} modal>
             {close => (
                 <div className="modal">
                     <div className="header"> {title} </div>
@@ -92,7 +98,8 @@ class MoviesForm extends Component {
                     </div>
                 </div>
             )}
-        </Popup>
+        </Popup>  )}
+      />
       
     );
 }
@@ -101,5 +108,4 @@ class MoviesForm extends Component {
 }
 
 export default MoviesForm;
-
 

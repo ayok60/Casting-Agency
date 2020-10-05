@@ -3,6 +3,8 @@ import '../stylesheets/cards.css';
 import Popup from 'reactjs-popup';
 import MoviesForm from './MoviesForm';
 import AssignActorsForm from './AssignActorsForm'
+import Can from './Can';
+
 
 
 
@@ -32,23 +34,36 @@ class Card extends Component {
           <p>Lorem Ipsum Dipsum hortata. Mixcall Horcho. Mixwell Chingo. More Bingo. Lorem Ipum doth be hard.</p>
           <div class="card-btns">
           <MoviesForm title={title} release_date={release_date} movie={movie} />
-          <AssignActorsForm title={title} movie={movie}/>
-          <Popup trigger={open => ( <button>X</button> )} modal>
-            {close => (
-              <div className="modal">
-                <div className="header"> { title } </div>
-                <div className="content">
-                  {' '}
-                  Are you sure you want to delete  { title } ?
-                  
-                </div>
-                <div className="actions">
-                  <button className="button" onClick={() => { close(); window.location.reload(); this.props.deleteMovie('DELETE')}}> Delete</button>
-                  <button className="button" onClick={() => { close(); }}> Cancel</button>
-                </div>
-              </div>
+          <Can
+            permission="edit:movies"
+            yes={() => (
+              <AssignActorsForm title={title} movie={movie}/>
             )}
-          </Popup>
+          />
+          <Can
+            permission="delete:movie"
+            yes={() => (
+
+              <Popup trigger={open => ( <button>X</button> )} modal>
+                {close => (
+                  <div className="modal">
+                    <div className="header"> { title } </div>
+                    <div className="content">
+                      {' '}
+                      Are you sure you want to delete  { title } ?
+                      
+                    </div>
+                    <div className="actions">
+                      <button className="button" onClick={() => { close(); window.location.reload(); this.props.deleteMovie('DELETE')}}> Delete</button>
+                      <button className="button" onClick={() => { close(); }}> Cancel</button>
+                    </div>
+                  </div>
+                )}
+              </Popup>
+
+            )}
+          />
+          
           </div>
         </div>
       </div>

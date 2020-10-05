@@ -3,10 +3,11 @@ import '../stylesheets/cards.css';
 import '../stylesheets/form.css';
 import Popup from 'reactjs-popup';
 import $ from 'jquery';
+import Can from './Can'
 
 
 
-
+const token = localStorage.getItem('JWTS_LOCAL_KEY');
 
 
 class ActorsForm extends Component {
@@ -25,8 +26,9 @@ class ActorsForm extends Component {
     createActor = (id) => (event) => {
         event.preventDefault();
         $.ajax({
-        url: `/actors/${id}`, //TODO: update request URL
+        url: `/actors/${id}`, 
         type: "PATCH",
+        headers: {"Authorization": 'Bearer ' + token},
         dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -66,38 +68,42 @@ class ActorsForm extends Component {
     const { name, age, actor } = this.props;
 
     return(
-        
-        <Popup trigger={open => ( <button>edit</button> )} modal>
-            {close => (
-                <div className="modal">
-                    <div>
-                    <div className="header"> {name} </div>
-                    <div className="content">
-                        {' '}
-                        <div id="form">
-                            <form className="form-view" id="add-actor-form" onSubmit={this.createActor(actor)}>
-                                <label>Name</label>
-                                <input type="text" name="name" placeholder={name} onChange={this.handleChange}/>
-                                <label>Age</label>
-                                <input type="text" name="age" placeholder={age} onChange={this.handleChange}/>
-                                <label>Gender</label>
-                                <select id="gender" name="gender" onChange={this.handleChange}>
-                                    <option  disabled hidden value="Male">Select</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                                <label>Image Link</label>
-                                <input type="text" name="image_link" placeholder='http://' onChange={this.handleChange}/>
-                                <div className="actions">
-                                    <input type="submit" onClick={() => {window.location.reload();}} className="button" value="Edit" />  
-                                    <button className="button" onClick={() => { close(); }}> Cancel </button>
-                                </div>   
-                            </form>
+        <Can
+            permission="edit:actors"
+            yes={() => ( 
+                <Popup trigger={open => ( <button>edit</button> )} modal>
+                    {close => (
+                        <div className="modal">
+                            <div>
+                            <div className="header"> {name} </div>
+                            <div className="content">
+                                {' '}
+                                <div id="form">
+                                    <form className="form-view" id="add-actor-form" onSubmit={this.createActor(actor)}>
+                                        <label>Name</label>
+                                        <input type="text" name="name" placeholder={name} onChange={this.handleChange}/>
+                                        <label>Age</label>
+                                        <input type="text" name="age" placeholder={age} onChange={this.handleChange}/>
+                                        <label>Gender</label>
+                                        <select id="gender" name="gender" onChange={this.handleChange}>
+                                            <option  disabled hidden value="Male">Select</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                        <label>Image Link</label>
+                                        <input type="text" name="image_link" placeholder='http://' onChange={this.handleChange}/>
+                                        <div className="actions">
+                                            <input type="submit" onClick={() => {window.location.reload();}} className="button" value="Edit" />  
+                                            <button className="button" onClick={() => { close(); }}> Cancel </button>
+                                        </div>   
+                                    </form>
+                                </div>
+                            </div></div>
                         </div>
-                    </div></div>
-                </div>
+                    )}
+                </Popup>
             )}
-        </Popup>
+        />
       
     );
 }

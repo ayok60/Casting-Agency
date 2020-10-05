@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import '../stylesheets/cards.css';
 import '../stylesheets/form.css';
 import Popup from 'reactjs-popup';
-import $, { get } from 'jquery';
+import $ from 'jquery';
 
 
-
+const token = localStorage.getItem('JWTS_LOCAL_KEY');
 
 class AssignActorsForm extends Component {
     
@@ -29,8 +29,9 @@ class AssignActorsForm extends Component {
   
   getCasting = (id) => {
     $.ajax({
-      url: `/castings/movies/${id}`, //TODO: update request URL
+      url: `/castings/movies/${id}`, 
       type: "GET",
+      headers: {"Authorization": 'Bearer ' + token},
       success: (result) => {
         this.setState({
           castings: result.castings,
@@ -50,8 +51,9 @@ class AssignActorsForm extends Component {
   AssignActors = (event) => {
     event.preventDefault();
     $.ajax({
-      url: '/castings/movies', //TODO: update request URL
+      url: '/castings/movies', 
       type: "POST",
+      headers: {"Authorization": 'Bearer ' + token},
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({
@@ -77,8 +79,9 @@ class AssignActorsForm extends Component {
   
   deleteActorCast = (movie_id, actor_id) => {
         $.ajax({
-          url: `/movies/${movie_id}/${actor_id}`, //TODO: update request URL
+          url: `/movies/${movie_id}/${actor_id}`, 
           type: "DELETE",
+          headers: {"Authorization": 'Bearer ' + token},
           error: (error) => {
             console.log(error);
             return;

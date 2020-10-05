@@ -1,0 +1,6 @@
+{
+    "domain": "casting-agency-project.us.auth0.com",
+    "clientId": "p8Q4TJg4o4arICCCOmY3ob20u5ADZRsY",
+    "audience": "casting",
+    "redirectUri": "http://localhost:3000"
+  }

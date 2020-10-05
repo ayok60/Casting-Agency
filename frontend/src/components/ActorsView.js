@@ -5,6 +5,10 @@ import '../stylesheets/cards.css';
 import Card from './ActorsCard';
 import $ from 'jquery';
 
+
+const token = localStorage.getItem('JWTS_LOCAL_KEY');
+
+
 class ActorsView extends Component{
 
     
@@ -19,11 +23,11 @@ componentDidMount() {
     this.getActors();
     
 }
-
 getActors = () => {
     $.ajax({
-      url: `/actors`, //TODO: update request URL
+      url: `/actors`, 
       type: "GET",
+      headers: {"Authorization": 'Bearer ' + token},
       success: (result) => {
         this.setState({
             actors: result.actors
@@ -40,8 +44,9 @@ getActors = () => {
 deleteActor = (id) => (action) => {
   if(action === 'DELETE') {
       $.ajax({
-        url: `/actors/${id}`, //TODO: update request URL
+        url: `/actors/${id}`, 
         type: "DELETE",
+        headers: {"Authorization": 'Bearer ' + token},
         error: (error) => {
           return;
         }

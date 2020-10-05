@@ -3,13 +3,13 @@ import '../stylesheets/cards.css';
 import '../stylesheets/form.css';
 import Popup from 'reactjs-popup';
 import $ from 'jquery';
+import Can from './Can'
 
 
 
+const token = localStorage.getItem('JWTS_LOCAL_KEY');
 
-
-
-class AddMovie extends Component {
+class Create extends Component {
     
   constructor(){
     super();
@@ -30,8 +30,9 @@ class AddMovie extends Component {
   addMovie = (event) => {
     event.preventDefault();
     $.ajax({
-      url: '/movies', //TODO: update request URL
+      url: '/movies', 
       type: "POST",
+      headers: {"Authorization": 'Bearer ' + token},
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({
@@ -58,8 +59,9 @@ class AddMovie extends Component {
   addActor = (event) => {
     event.preventDefault();
     $.ajax({
-      url: '/actors', //TODO: update request URL
+      url: '/actors', 
       type: "POST",
+      headers: {"Authorization": 'Bearer ' + token},
       dataType: 'json',
       contentType: 'application/json',
       data: JSON.stringify({
@@ -102,11 +104,10 @@ class AddMovie extends Component {
   
   }
 
-
+  
 
   render(){
-    
-    
+        
     return(
         
         <Popup trigger={open => ( <button>Create</button> )} modal>
@@ -114,27 +115,32 @@ class AddMovie extends Component {
               
                 <div className="modal">
                   {this.update() ?
-                  <div>
-                  <div className="header"> Create New Movie </div>
-                  <div className="content">
-                      {' '}
-                      <div id="form">
-                          <form className="form-view" id="add-movie-form" onSubmit={this.addMovie}>
-                              <label>Title</label>
-                              <input type="text" name="title" placeholder='Movie' required onChange={this.handleChange}/>
-                              <label>Release Date</label>
-                              <input type="text" name="release_date" placeholder='DD.MM.YYY' required onChange={this.handleChange}/>
-                              <label>Poster Image Link</label>
-                              <input type="text" name="image_link" placeholder='http://' required onChange={this.handleChange}/>
-                              <div className="actions">
-                                <input type="submit" className="button" onClick={() => {
-                                  console.log('submit')}} value="Create" />  
-                                <button className="button" onClick={() => { close();}}> Cancel </button>
-                              </div>   
-                          </form>
-                      </div>
-                  </div>
-                  </div>
+                  <Can
+                  permission="add:movie"
+                  yes={() => (
+                    <div>
+                    <div className="header"> Create New Movie </div>
+                    <div className="content">
+                        {' '}
+                        <div id="form">
+                            <form className="form-view" id="add-movie-form" onSubmit={this.addMovie}>
+                                <label>Title</label>
+                                <input type="text" name="title" placeholder='Movie' required onChange={this.handleChange}/>
+                                <label>Release Date</label>
+                                <input type="text" name="release_date" placeholder='DD.MM.YYY' required onChange={this.handleChange}/>
+                                <label>Poster Image Link</label>
+                                <input type="text" name="image_link" placeholder='http://' required onChange={this.handleChange}/>
+                                <div className="actions">
+                                  <input type="submit" className="button" onClick={() => {
+                                    console.log('submit')}} value="Create" />  
+                                  <button className="button" onClick={() => { close();}}> Cancel </button>
+                                </div>   
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                    )}
+                  />
                   :
                   <div>
                   <div className="header"> Create New Actor </div>
@@ -175,4 +181,5 @@ class AddMovie extends Component {
   
 }
 
-export default AddMovie;
+export default Create;
+
