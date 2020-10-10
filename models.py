@@ -4,8 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 
 default_path = 'postgres://ayakhashoggi@localhost:5432/db'
-#database_path = os.getenv('DATABASE_URL',default_path)
-database_path = os.environ['DATABASE_URL']
+database_path = os.getenv('DATABASE_URL',default_path)
+#database_path = os.environ['DATABASE_URL']
 
 db = SQLAlchemy()
 
@@ -29,7 +29,7 @@ class Movies(db.Model):
     __tablename__ = 'movies'
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String)
+    title = db.Column(db.String, nullable = False)
     release_date = db.Column(db.String)
     image_link = db.Column(db.String(500))
 
@@ -66,7 +66,7 @@ class Actors(db.Model):
     __tablename__ = 'actors'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String, nullable = False)
     age = db.Column(db.String)
     gender = db.Column(db.Enum('Male', 'Female', name="gender"))
     image_link = db.Column(db.String)

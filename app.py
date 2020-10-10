@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+import json
 
 from models import setup_db, Movies, Actors, Castings
 
@@ -16,7 +17,7 @@ def create_app(test_config=None):
 
 #  Actors
 #  ----------------------------------------------------------------
-
+  
 
   '''
   Get Actors
@@ -66,7 +67,7 @@ def create_app(test_config=None):
       "success": True, 
       "actor": actor.format(),
       "actors": actors_lsit
-    }),200
+    }),201
 
 
   '''
@@ -121,6 +122,9 @@ def create_app(test_config=None):
         abort(404)
     
     actor = Actors.query.filter(Actors.id == id).one_or_none()
+
+    if not actor:
+        abort(404)
 
     try: 
       actor.delete()
@@ -185,7 +189,7 @@ def create_app(test_config=None):
       "success": True, 
       "actor": movie.format(),
       "actors": movies_lsit
-    }),200
+    }),201
 
 
   '''
@@ -243,6 +247,9 @@ def create_app(test_config=None):
         abort(404)
     
     movie = Movies.query.filter(Movies.id == id).one_or_none()
+
+    if not movie:
+        abort(404)
     castings = Castings.query.filter(Castings.movie_id == id).all()
     castings_list = [casting.actor_id for casting in castings]
 
