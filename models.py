@@ -97,28 +97,3 @@ class Actors(db.Model):
             'image_link': self.image_link
         }
 
-
-class Castings(db.Model):  
-    __tablename__ = 'castings'
-
-    movie_id = db.Column(db.Integer, db.ForeignKey('movies.id'), primary_key=True, nullable=False)
-    actor_id = db.Column(db.Integer, db.ForeignKey('actors.id'), primary_key=True, nullable=False)
-    movie = db.relationship(Movies, backref= db.backref('actor'))
-    actor = db.relationship(Actors, backref= db.backref('movie'))
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-  
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-
-    def format(self):
-        return {
-            'actor_id': self.actor_id,
-            'movie_id': self.movie_id,
-        }

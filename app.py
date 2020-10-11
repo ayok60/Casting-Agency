@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import json
 
-from models import setup_db, Movies, Actors, Castings
+from models import setup_db, Movies, Actors
 
 from auth import AuthError, requires_auth
 
@@ -105,7 +105,7 @@ def create_app(test_config=None):
     return jsonify({
       "success": True, 
       "actor": actor.format(),
-      "acrors": actors_lsit
+      "actors": actors_lsit
     }),200
 
 
@@ -134,6 +134,7 @@ def create_app(test_config=None):
     
     return jsonify({
       "success": True, 
+      "actor": id
     }),200
 
 
@@ -187,8 +188,8 @@ def create_app(test_config=None):
     
     return jsonify({
       "success": True, 
-      "actor": movie.format(),
-      "actors": movies_lsit
+      "movie": movie.format(),
+      "movies": movies_lsit
     }),201
 
 
@@ -230,7 +231,7 @@ def create_app(test_config=None):
     return jsonify({
       "success": True, 
       "movie": movie.format(),
-      "acrors": movies_lsit
+      "movies": movies_lsit
     }),200
 
 
@@ -250,13 +251,8 @@ def create_app(test_config=None):
 
     if not movie:
         abort(404)
-    castings = Castings.query.filter(Castings.movie_id == id).all()
-    castings_list = [casting.actor_id for casting in castings]
 
-    try: 
-      for casting in castings:
-        casting.delete() 
-
+    try:
       movie.delete()
       
 
@@ -265,94 +261,8 @@ def create_app(test_config=None):
     
     return jsonify({
       "success": True, 
-      "cast": castings_list,
       "movie": id,
     }),200
-
-
-  '''
-  Get Movie Cast
-  '''
-  @app.route('/castings/movies/<int:id>', methods=['GET'])
-  @requires_auth('view:movies')
-  def get_castings_actors(jwt, *args, **kwargs):
-
-    id = kwargs['id']
-
-    if not id:
-        abort(404)
-
-    castings = Castings.query.filter_by(movie_id = id).all()
-    casting_lsit = [casting.format() for casting in castings]
-
-    actors_list = [Actors.query.get(actor['actor_id']) for actor in casting_lsit]
-    
-    actors = []
-    for actor in actors_list: 
-      actors.append({
-        'name' : actor.name,
-        'id': actor.id
-      })
-    
-    
-    return jsonify({
-      "success": True, 
-      "castings": casting_lsit,
-      "actors": actors,
-
-    }),200
-
-    
-  '''
-  Add Movie Cast
-  '''
-  @app.route('/castings/movies', methods=['POST','GET'])
-  @requires_auth('edit:movies')
-  def post_castings_actors(jwt):
-    
-    
-
-    body = request.get_json()
-
-    castings = Castings(
-      movie_id = body.get('movie_id'),
-      actor_id = body.get('actor_id')
-    )
-    
-    try:
-      castings.insert()
-    except:
-      abort(422)
-    
-
-    
-    return jsonify({
-      "success": True, 
-    }),200
-
-  '''
-  Remove Actor from Movie
-  '''
-  @app.route('/movies/<int:movie_id>/<int:actor_id>', methods=['DELETE','GET'])
-  @requires_auth('edit:movies')
-  def delete_castings_actors(jwt, *args, **kwargs):
-
-    movie_id = kwargs['movie_id']
-    actor_id = kwargs['actor_id']
-    
-    casting = Castings.query.filter_by(movie_id = movie_id, actor_id = actor_id ).first()
-
-
-    casting.delete()
-    
-    return jsonify({
-      "success": True, 
-      "movie": movie_id,
-      "actor": actor_id,
-    }),200
-
-
-
   
     
   @app.errorhandler(422)
