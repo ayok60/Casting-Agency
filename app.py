@@ -47,7 +47,7 @@ def create_app(test_config=None):
         )
         try:
             actor.insert()
-        except:
+        except unprocessable:
             abort(422)
         actors = Actors.query.all()
         actors_lsit = [actor.format() for actor in actors]
@@ -73,11 +73,13 @@ def create_app(test_config=None):
             abort(404)
         actor.name = body.get('name') if body.get('name') else actor.name
         actor.age = body.get('age') if body.get('age') else actor.age
-        actor.gender = body.get('gender') if body.get('gender') else actor.gender
-        actor.image_link = body.get('image_link') if body.get('image_link') else actor.image_link
+        actor.gender = body.get('gender') if body.get('gender')
+        else actor.gender
+        actor.image_link = body.get('image_link') if body.get('image_link')
+        else actor.image_link
         try:
             actor.update()
-        except:
+        except unprocessable:
             abort(422)
         return jsonify({
           "success": True,
@@ -98,7 +100,7 @@ def create_app(test_config=None):
             abort(404)
         try:
             actor.delete()
-        except:
+        except unprocessable:
             abort(422)
         return jsonify({
           "success": True,
@@ -134,7 +136,7 @@ def create_app(test_config=None):
         )
         try:
             movie.insert()
-        except:
+        except unprocessable:
             abort(422)
         movies = Movies.query.all()
         movies_lsit = [movie.format() for movie in movies]
@@ -159,13 +161,15 @@ def create_app(test_config=None):
         if not movie:
             abort(404)
         movie.title = body.get('title') if body.get('title') else movie.title
-        movie.release_date = body.get('release_date') if body.get('release_date') else movie.release_date
-        movie.image_link = body.get('image_link') if body.get('image_link') else movie.image_link
+        movie.release_date = body.get('release_date') if
+        body.get('release_date') else movie.release_date
+        movie.image_link = body.get('image_link') if body.get('image_link')
+        else movie.image_link
         print(movie.title)
         print(movie.release_date)
         try:
             movie.update()
-        except:
+        except unprocessable:
             abort(422)
         return jsonify({
           "success": True,
@@ -186,20 +190,23 @@ def create_app(test_config=None):
             abort(404)
         try:
             movie.delete()
-        except:
+        except unprocessable:
             abort(422)
         return jsonify({
           "success": True,
           "movie": id,
         }), 200
+
     # error handler 422
     @app.errorhandler(422)
     def unprocessable(error):
+
         return jsonify({
           "success": False,
           "error": 422,
           "message": "unprocessable"
         }), 422
+
     # error handler 422
     @app.errorhandler(404)
     def not_found(error):
@@ -208,6 +215,7 @@ def create_app(test_config=None):
           'error': 404,
           'message': 'resource not found'
         }), 404
+
     # error handler 422
     @app.errorhandler(400)
     def bad_request(error):
@@ -216,6 +224,7 @@ def create_app(test_config=None):
           'error': 400,
           'message': 'Server error'
         }), 400
+
     # error handler 422
     @app.errorhandler(500)
     def bad_request(error):
@@ -225,11 +234,9 @@ def create_app(test_config=None):
           'message': 'bad request'
         }), 500
 
-
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
-
 
     @app.errorhandler(AuthError)
     def handle_auth_error(ex):
@@ -238,6 +245,7 @@ def create_app(test_config=None):
         return response
 
     return app
+
 
 app = create_app()
 '''
