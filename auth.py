@@ -1,3 +1,4 @@
+import os
 import json
 from flask import request, _request_ctx_stack
 from functools import wraps
@@ -5,52 +6,52 @@ from jose import jwt
 from urllib.request import urlopen
 
 
-AUTH0_DOMAIN = 'casting-agency-project.us.auth0.com'
-ALGORITHMS = ['RS256']
-API_AUDIENCE = 'casting'
+AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN')
+ALGORITHMS = os.environ['ALGORITHMS']
+API_AUDIENCE = os.environ.get('API_AUDIENCE')
 
-## AuthError Exception
+# AuthError Exception
 '''
 AuthError Exception
 A standardized way to communicate auth failure modes
 '''
+
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
 
-## Auth Header
+# Auth Header
 
 def get_token_auth_header():
-    
     auth = request.headers.get('Authorization', None)
     if not auth:
         raise AuthError({
             'code': 'authorization_header_missing',
             'description': 'Authorization header is expected.'
-        },401)
+        }, 401)
 
     splited_parts = auth.split()
     if splited_parts[0].lower() != 'bearer':
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Authorization header must starts with "Bearer".'
-        },401)
+        }, 401)
 
     elif len(splited_parts) == 1:
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Token not found.'
-        },401)
+        }, 401)
 
     elif len(splited_parts) > 2:
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Authorization header must be bearer token.'
-        },401)
+        }, 401)
 
-        
     token = splited_parts[1]
     return token
 
@@ -61,16 +62,15 @@ def check_permissions(permission, payload):
         raise AuthError({
             'code': 'invalid_claims',
             'description': 'Permissions not included in JWT.'
-        },400)
+        }, 400)
 
     if permission not in payload['permissions']:
         raise AuthError({
             'code': 'unauthorized',
             'description': 'Permissions not found.'
-        },401)
-        
+        }, 401)
     return True
-    
+
 
 def verify_decode_jwt(token):
 
@@ -83,8 +83,8 @@ def verify_decode_jwt(token):
         raise AuthError({
             'code': 'invalid_header',
             'description': 'Authorization malformed.'
-        },401)
-    
+        }, 401)
+
     for key in jwks['keys']:
 
         if key['kid'] == unverified_header['kid']:
@@ -95,19 +95,19 @@ def verify_decode_jwt(token):
                 'n': key['n'],
                 'e': key['e']
             }
-        
+
     if rsa_key:
         try:
             payload = jwt.decode(
                 token,
                 rsa_key,
-                algorithms = ALGORITHMS,
-                audience = API_AUDIENCE,
-                issuer = 'https://' + AUTH0_DOMAIN + '/'
+                algorithms=ALGORITHMS,
+                audience=API_AUDIENCE,
+                issuer='https://' + AUTH0_DOMAIN + '/'
             )
 
             return payload
-        
+
         except jwt.ExpiredSignatureError:
             raise AuthError({
                 'code': 'token_expired',
